@@ -1,27 +1,174 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
-
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
+<head>
+<meta charset="UTF-8">
+<title>Ether Pricing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <body>
-    <h1>Hello App Engine!</h1>
+<meta name="description" content="EtherPricing Home - showing Ethereum Ether ETH price in simple view">
+<meta name="keywords" content="ether pricing, ethereum ether pricing, ethereum ether average price index, ethereum ether global average price index, ethereum ether global average price, ethereum ether global average price infographics" />
+<meta name="keywords" content="Ether worth, Ether converter, Ether cost, Ether exchange rate, Ether price, Ether value, price of Ether, Ether calculator">
+</head>
+<body>
+<div id="center">
+	<div id="circle">
+		<h1 class="title">Ether</h1>
+		<h1 class="title">Pricing</h1>
+		<h1 id="lastUsd" class="title"></h1>
+		<h1 id="lastMxbt" class="title"></h1>
+		<h1 id="currency" class="title">USD</h1>
+	</div>
+	<div id="bar">
+		<button onclick="javascript:window.location.href='detail.html'">Detail</button>
+		<button onclick="javascript:window.location.href='c/'">Calculator</button>
+	</div>
+</div>
+
+<script type="text/javascript">
+(function() {
+	var currency = "USD";
 	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="etcpricing">Etcpricing</a></td>
-      </tr>
-    </table>
-  </body>
+	function retrieveData() {
+		var xhr = new XMLHttpRequest();
+		var bustCache = '?' + new Date().getTime();
+		xhr.open('GET', '/api/average.jsp' + bustCache);
+		xhr.send(null);
+	
+		xhr.onreadystatechange = function () {
+			var DONE = 4;
+			var OK = 200;
+			if (xhr.readyState === DONE) {
+				if (xhr.status === OK) {
+					var data = JSON.parse(xhr.responseText);
+					if (data && data.last) {
+						// convert to mxbt by * 1000.  keep only 4 decimals.
+						var lastMxbt = (data.last * 1000).toFixed(4);
+						var lastUsd = data.lastUsd.toFixed(4);
+						var lastUsdElem = id("lastUsd");
+						var lastMxbtElem = id("lastMxbt");
+						lastUsdElem.innerHTML = lastUsd;
+						lastMxbtElem.innerHTML = lastMxbt;
+						updateTitle();
+					}
+			  	} else {
+			  		if (console) {
+				    	console.log('Error: ' + xhr.status);
+			  		}
+			  	}
+			}
+		};
+	}
+	
+	retrieveData();
+	setInterval(retrieveData, 60000);
+	
+	function id(name) {
+		return document.getElementById(name);
+	}
+	
+	function updateTitle() {
+		document.title = ("USD" === currency) ?
+				"$" + id("lastUsd").innerHTML + " - Ether Pricing" : 
+				id("lastMxbt").innerHTML + " mXBT - Ether Pricing";
+	}
+	
+	function toggleCurrency() {
+		var lastUsdElem = id("lastUsd");
+		var lastMxbtElem = id("lastMxbt");
+		var currencyElem = id("currency");
+		if ("USD" === currency) {
+			currency = "mXBT";
+			lastUsdElem.style.display = "none";
+			lastMxbtElem.style.display = "block";
+			currencyElem.innerHTML = currency;
+		} else {
+			currency = "USD";
+			lastUsdElem.style.display = "block";
+			lastMxbtElem.style.display = "none";
+			currencyElem.innerHTML = currency;
+		}
+		updateTitle();
+	}
+	
+	id("circle").addEventListener("click", toggleCurrency);
+}());
+</script>
+
+<style>
+.title {
+	text-align: center;
+	font-family: Lucida Grande,Lucida Sans Unicode;
+	color: rgb(148,148,148);
+}
+
+#center {
+	margin:auto;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+	width:24em;
+    height:22em;
+    margin-top: -11em; /*set to a negative number 1/2 of your height*/
+    margin-left: -11em; /*set to a negative number 1/2 of your width*/
+}
+
+#circle {
+	margin: auto;
+    width:18em;
+    height:18em;
+    -moz-border-radius: 9em;
+	-webkit-border-radius: 9em;
+	border-radius: 9em;
+	border: 6px solid #ccc;
+    background-color: #DBD5A4; /*#f3f3f3*/
+    cursor: pointer;
+}
+
+#bar {
+	text-align: center;
+	padding: 1em;
+}
+
+#bar button {
+	margin-left: 1em;
+	margin-right: 1em;
+	font-family: Lucida Grande,Lucida Sans Unicode;
+	font-weight: bold;
+	background-color: rgba(0,0,0,0);
+	-moz-border-radius: 5em;
+	-webkit-border-radius: 5em;
+	border-radius: 5em;
+	border: 1px solid #ccc;
+	padding: 1em;
+	color: white;
+	width: 10em;
+}
+
+#lastMxbt {
+	display: none;
+}
+
+body {
+	background: lightgray;
+	/*background-image: url('/img/grad.jpg');*/
+	background: -webkit-linear-gradient(90deg, #649173 10%, #DBD5A4 90%); /* Chrome 10+, Saf5.1+ */
+	background:    -moz-linear-gradient(90deg, #649173 10%, #DBD5A4 90%); /* FF3.6+ */
+	background:     -ms-linear-gradient(90deg, #649173 10%, #DBD5A4 90%); /* IE10 */
+	background:      -o-linear-gradient(90deg, #649173 10%, #DBD5A4 90%); /* Opera 11.10+ */
+	background:         linear-gradient(90deg, #649173 10%, #DBD5A4 90%); /* W3C */        
+}
+</style>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-73381669-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
 </html>
