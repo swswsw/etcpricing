@@ -33,6 +33,7 @@
     <description>update bittrex data to cache</description>
     <schedule>every 1 minutes</schedule>
   </cron>
+  <!--
   <cron>
     <url>/update/quadrigacx.jsp</url>
     <description>update quadrigacx data to cache</description>
@@ -43,11 +44,13 @@
     <description>update cex data to cache</description>
     <schedule>every 1 minutes</schedule>
   </cron>
+  -->
   <cron>
     <url>/update/yobit.jsp</url>
     <description>update yobit data to cache</description>
     <schedule>every 1 minutes</schedule>
   </cron>
+  <!-- 
   <cron>
     <url>/update/btce.jsp</url>
     <description>update btce data to cache</description>
@@ -68,6 +71,7 @@
     <description>update gdax data to cache</description>
     <schedule>every 1 minutes</schedule>
   </cron>
+  -->
   <!-- 
   <cron>
     <url>/update/okcoin.jsp</url>
