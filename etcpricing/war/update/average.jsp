@@ -36,6 +36,14 @@ private double findXbtRates(String currencySymbol, JSONObject bitcoinaverageRate
 
 long currentTimeMillis = System.currentTimeMillis();
 
+// get eth to btc price
+String sEpRates = CacheManager.getString("latest_etherpricing");
+JSONObject epRates = null;
+double ethbtcPrice = 0.0D; // ether price in btc
+if (sEpRates != null) {
+	epRates = new JSONObject(sEpRates);
+	ethbtcPrice = epRates.getDouble("last");
+}
 
 //get bitcoin to fiat currency rate data
 String sBaRates = CacheManager.getString("latest_bitcoinaverage");
@@ -96,6 +104,11 @@ for (int i=0; i<allPrices.size(); i++) {
 	if ("BTC".equals(price.getCurrency2()) || "XBT".equals(price.getCurrency2())) {
 		last = price.getLast();
 		volume = price.getVolume();
+	} else if ("ETH".equals(price.getCurrency2())) {
+		if (ethbtcPrice != 0.0D) {
+			last = price.getLast() * ethbtcPrice;
+			volume = price.getVolume();
+		}
 	} else {
 		double xbtInCurrency2 = 0.0D;
 		try {
@@ -121,8 +134,10 @@ for (int i=0; i<allPrices.size(); i++) {
 		// so to get last in xbt,   last = price.getLast() / xbtInCurrency2
 	}
 	
-	totalSoFar += (last * volume);
-	totalVolume += volume;
+	if (last != 0.0D && volume != 0.0D) {
+		totalSoFar += (last * volume);
+		totalVolume += volume;
+	}
 }
 
 // avoid divide by 0 problem.  check if denominator is 0.
