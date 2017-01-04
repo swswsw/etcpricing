@@ -8,7 +8,7 @@
 <%@ page import="org.json.*" %>
 <%!
 /**
- * @param currencyPair - kraken currencyPair, eg. XETHXXBT, XETHZEUR
+ * @param currencyPair - kraken currencyPair, eg. XETCXXBT, XETCZEUR
  */
 private PriceCache.Price convertToPrice(String currencyPair, JSONObject krakenObj, long time, String exchange) {
 	String currency1 = currencyPair.substring(1, 4); // ignore the leading x or z
@@ -23,7 +23,7 @@ private PriceCache.Price convertToPrice(String currencyPair, JSONObject krakenOb
 <%
 JSONObject json = null;
 try {
-	json = RetrieveData.jsonData("https://api.kraken.com/0/public/Ticker?pair=ETHXBT,ETHUSD,ETHEUR,ETHCAD,ETHGBP,ETHJPY");
+	json = RetrieveData.jsonData("https://api.kraken.com/0/public/Ticker?pair=ETCETH,ETCXBT,ETCUSD,ETCEUR");
 } catch (SocketTimeoutException ex) {
 	// sometimes, timeout can occur
 	throw ex;

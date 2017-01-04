@@ -11,23 +11,28 @@ final long time = System.currentTimeMillis();
 final String poloniex = "Poloniex"; 
 PriceCache pc = new PriceCache();
 if (json != null) {
-	JSONObject btceth = json.getJSONObject("BTC_ETH");
-	JSONObject usdteth = json.getJSONObject("USDT_ETH");
+	JSONObject btcetc = json.getJSONObject("BTC_ETC");
+	JSONObject ethetc = json.getJSONObject("ETH_ETC");
+	JSONObject usdtetc = json.getJSONObject("USDT_ETC");
 	
 	// weird, currency pair means first currency = this much second currency.  
 	// eg. eth_btc price of 0.0020 means  1 eth = 0.0020 btc
 	// but poloniex seems to flip the price (flip around first and second currency)
 	// we want to normalize the notation, so we will flip first and second currency.
 	
-	// we want quoteVolume as the unit is in eth
-	PriceCache.Price btcethPrice = 
-		new PriceCache.Price("ETH", "BTC", btceth.getDouble("last"), btceth.getDouble("quoteVolume"), time, poloniex);
+	// we want quoteVolume as the unit is in etc
+	PriceCache.Price btcetcPrice = 
+		new PriceCache.Price("ETC", "BTC", btcetc.getDouble("last"), btcetc.getDouble("quoteVolume"), time, poloniex);
 	
-	PriceCache.Price usdtethPrice = 
-		new PriceCache.Price("ETH", "USDT", usdteth.getDouble("last"), usdteth.getDouble("quoteVolume"), time, poloniex);
+	PriceCache.Price ethetcPrice = 
+			new PriceCache.Price("ETC", "ETH", ethetc.getDouble("last"), ethetc.getDouble("quoteVolume"), time, poloniex);
 	
-	pc.getPriceList().add(btcethPrice);
-	pc.getPriceList().add(usdtethPrice);
+	PriceCache.Price usdtetcPrice = 
+		new PriceCache.Price("ETC", "USDT", usdtetc.getDouble("last"), usdtetc.getDouble("quoteVolume"), time, poloniex);
+	
+	pc.getPriceList().add(btcetcPrice);
+	pc.getPriceList().add(ethetcPrice);
+	pc.getPriceList().add(usdtetcPrice);
 	
 	CacheManager.save("latest_poloniex", pc);
 }

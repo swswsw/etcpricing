@@ -10,23 +10,23 @@ PriceCache pc = new PriceCache();
 
 // get list of symbols
 JSONArray symbols = RetrieveData.jsonArray("https://api.bitfinex.com/v1/symbols");
-List<String> ethSymbols = new ArrayList<String>(20); // most likely just 2.  not likely to be over 20.
+List<String> etcSymbols = new ArrayList<String>(20); // most likely just 2.  not likely to be over 20.
 
-// find symbol that starts with ETH
+// find symbol that starts with ETC
 for (int i=0; i<symbols.length(); i++) {
 	String symbol = symbols.getString(i);
-	if (symbol.startsWith("eth")) {
-		ethSymbols.add(symbol);
+	if (symbol.startsWith("etc")) {
+		etcSymbols.add(symbol);
 	}
 }
 
-//if symbol contains eth, gets the data
-for (String symbol:ethSymbols) {
+//if symbol contains etc, gets the data
+for (String symbol:etcSymbols) {
 	JSONObject json = RetrieveData.jsonData("https://api.bitfinex.com/v1/pubticker/" + symbol);
 	final long time = System.currentTimeMillis();
 	final String bitfinex = "Bitfinex";
 	
-	// eg. symbol is "ethusd"
+	// eg. symbol is "etcusd"
 	String currency1 = symbol.substring(0, 3).toUpperCase(); // take first 3 characters
 	String currency2 = symbol.substring(3).toUpperCase(); // take last 3 characters
 	double last = Double.parseDouble(json.getString("last_price")); // last_price is in "string"

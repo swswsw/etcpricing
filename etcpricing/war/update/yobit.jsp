@@ -8,7 +8,7 @@
 <%@ page import="org.json.*" %>
 <%!
 /**
- * @param currencyPair - yobit currencyPair, eg. eth_btc, etc_usd
+ * @param currencyPair - yobit currencyPair, eg. etc_btc, etc_usd
  */
 private PriceCache.Price convertToPrice(String currencyPair, JSONObject obj, long time, String exchange) {
 	String[] currencies = currencyPair.split("_");
@@ -22,7 +22,7 @@ private PriceCache.Price convertToPrice(String currencyPair, JSONObject obj, lon
 <%
 JSONObject json = null;
 try {
-	json = RetrieveData.jsonData("https://yobit.net/api/3/ticker/eth_btc-eth_usd-eth_rur");
+	json = RetrieveData.jsonData("https://yobit.net/api/3/ticker/etc_btc");
 } catch (SocketTimeoutException ex) {
 	// sometimes, timeout can occur
 	throw ex;

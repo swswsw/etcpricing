@@ -8,7 +8,7 @@
 <%@ page import="org.json.*" %>
 <%!
 /**
- * @param currencyPair - yunbi currencyPair, eg. ethbtc, ethcny
+ * @param currencyPair - yunbi currencyPair, eg. etcbtc, etccny
  */
 private PriceCache.Price convertToPrice(String currencyPair, JSONObject obj, long time, String exchange) {
 	String currency1 = currencyPair.substring(0,3).toUpperCase(); // first 3 characters are currency1
@@ -38,7 +38,7 @@ if (json != null) {
 		String key = keys.next();
 		String currencyPair = key.toUpperCase(); // normalize to upper case
 		JSONObject value = json.getJSONObject(key);
-		if (currencyPair.startsWith("ETH")) {
+		if (currencyPair.startsWith("ETC")) {
 			PriceCache.Price price = convertToPrice(currencyPair, value, time, yunbi);
 			pc.getPriceList().add(price);
 		}
